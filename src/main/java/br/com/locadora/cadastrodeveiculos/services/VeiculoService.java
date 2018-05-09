@@ -17,6 +17,7 @@ import br.com.locadora.cadastrodeveiculos.dao.VeiculoModel;
 import br.com.locadora.cadastrodeveiculos.dao.entidades.Veiculo;
 import br.com.locadora.cadastrodeveiculos.exception.ArmazenamentoException;
 import br.com.locadora.cadastrodeveiculos.exception.ValidacaoException;
+import br.com.locadora.cadastrodeveiculos.services.dto.RetornoBuscaDTO;
 import br.com.locadora.cadastrodeveiculos.services.dto.VeiculoBuscaDTO;
 import br.com.locadora.cadastrodeveiculos.services.dto.VeiculoDTO;
 
@@ -121,9 +122,9 @@ public class VeiculoService extends AbstractService<VeiculoDTO, Veiculo> {
 	public Response busca(VeiculoBuscaDTO dtoBusca) {
 		try {
 
-			List<Veiculo> veiculos = veiculoModel.busca(dtoBusca);
+			RetornoBuscaDTO retorno = veiculoModel.busca(dtoBusca);
 
-			return new ResponseBuilderImpl().status(Response.Status.OK).entity(veiculos).build();
+			return new ResponseBuilderImpl().status(Response.Status.OK).entity(retorno).build();
 		} catch (Exception e) {
 			logger.error("Erro ao remover item: " + dtoBusca, e);
 			throw new WebApplicationException(e.getMessage(), Response.Status.INTERNAL_SERVER_ERROR);

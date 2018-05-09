@@ -9,6 +9,7 @@ import br.com.locadora.cadastrodeveiculos.armazenamento.BancoEmMemoria;
 import br.com.locadora.cadastrodeveiculos.dao.entidades.Veiculo;
 import br.com.locadora.cadastrodeveiculos.exception.ArmazenamentoException;
 import br.com.locadora.cadastrodeveiculos.exception.PaginacaoException;
+import br.com.locadora.cadastrodeveiculos.services.dto.RetornoBuscaDTO;
 import br.com.locadora.cadastrodeveiculos.services.dto.VeiculoBuscaDTO;
 
 /**
@@ -20,12 +21,20 @@ import br.com.locadora.cadastrodeveiculos.services.dto.VeiculoBuscaDTO;
 public class VeiculoModel extends AbstractModel<Veiculo> {
 
 	private static BancoEmMemoria<Veiculo> banco = new BancoEmMemoria<Veiculo>();
-	
-	
-	public void remove(Veiculo v) throws ArmazenamentoException {
+
+	/**
+	 * Método que possui as regras de negócio para a remoção de um veículo do banco
+	 * em memória.
+	 * 
+	 * @param veiculo
+	 *            - veículo a ser excluído
+	 * 
+	 * @throws ArmazenamentoException
+	 */
+	public void remove(Veiculo veiculo) throws ArmazenamentoException {
 		try {
-			v.setFlExcluido(true);
-			super.atualiza(v);
+			veiculo.setFlExcluido(true);
+			super.atualiza(veiculo);
 		} catch (ArmazenamentoException e) {
 			throw e;
 		}
@@ -75,7 +84,9 @@ public class VeiculoModel extends AbstractModel<Veiculo> {
 	 * @throws PaginacaoException
 	 * 
 	 */
-	public List<Veiculo> busca(VeiculoBuscaDTO item) throws ArmazenamentoException, PaginacaoException {
+	public RetornoBuscaDTO busca(VeiculoBuscaDTO item) throws ArmazenamentoException, PaginacaoException {
+
+		RetornoBuscaDTO retorno = new RetornoBuscaDTO();
 
 		Predicate<Veiculo> predicate = v -> !v.getFlExcluido();
 
@@ -91,8 +102,11 @@ public class VeiculoModel extends AbstractModel<Veiculo> {
 			predicate = predicate.and(v -> v.getPlaca().equals(item.getPlaca()));
 		}
 		try {
-			return getSubLista(item.getMaxItensRetorno(), item.getPagina(),
-					super.getTodos().stream().filter(predicate).collect(Collectors.toList()));
+			List<Veiculo> lista = super.getTodos().stream().filter(predicate).collect(Collectors.toList());
+			retorno.setQuantidade(lista.size());
+			retorno.getVeiculos().addAll(getSubLista(item.getMaxItensRetorno(), item.getPagina(), lista));
+
+			return retorno;
 		} catch (ArmazenamentoException e) {
 			throw e;
 		} catch (PaginacaoException e) {

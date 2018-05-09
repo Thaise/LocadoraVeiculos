@@ -127,7 +127,7 @@ public abstract class AbstractService<T extends DTO, E extends Entidade> {
 	 * @return {@link Response} - retorna o status Http para a requisição e os
 	 *         veículos encontrados (caso existam)
 	 */
-	@GET // TODO tem que ser passado tudo por pathparam
+	@GET 
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/buscaTodos")
 	public Response buscaTodos() {

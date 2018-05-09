@@ -1,7 +1,11 @@
 package br.com.locadora.cadastrodeveiculos.services.dto;
 
-
-public class VeiculoBuscaDTO {
+/**
+ * Classe que representa DTO para busca de Veículos.
+ * 
+ * @author Thaise Santos Souza
+ */
+public class VeiculoBuscaDTO implements DTO{
 
 	private String modelo;
 	private String marca;

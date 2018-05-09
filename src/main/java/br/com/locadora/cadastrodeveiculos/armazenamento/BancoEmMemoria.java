@@ -26,7 +26,7 @@ public class BancoEmMemoria<E extends Entidade> {
 	 * 
 	 * @param item
 	 *            - item a ser inserido
-	 *            
+	 * 
 	 * @throws ArmazenamentoException
 	 */
 	public void insere(E item) throws ArmazenamentoException {
@@ -48,7 +48,8 @@ public class BancoEmMemoria<E extends Entidade> {
 	 */
 	public void atualiza(E item) throws ArmazenamentoException {
 		try {
-			items.replace(item.getId(), item);
+			if (items.containsKey(item.getId()))
+				items.replace(item.getId(), item);
 		} catch (Exception e) {
 			throw new ArmazenamentoException("Erro ao atualizar item", e);
 		}
