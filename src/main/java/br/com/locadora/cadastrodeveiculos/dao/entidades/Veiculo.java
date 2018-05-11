@@ -21,7 +21,7 @@ public class Veiculo implements Entidade {
 	private Boolean possuiAirbag;
 	private Boolean possuiArCond;
 	private Boolean possuiVidrosElet;
-	private Double potencia;
+	private Integer potencia;
 	private Status status;
 	private Boolean flExcluido = false;
 
@@ -105,11 +105,11 @@ public class Veiculo implements Entidade {
 		this.possuiVidrosElet = possuiVidrosElet;
 	}
 
-	public Double getPotencia() {
+	public Integer getPotencia() {
 		return potencia;
 	}
 
-	public void setPotencia(Double potencia) {
+	public void setPotencia(Integer potencia) {
 		this.potencia = potencia;
 	}
 

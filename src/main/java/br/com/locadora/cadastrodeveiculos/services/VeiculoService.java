@@ -113,8 +113,8 @@ public class VeiculoService extends AbstractService<VeiculoDTO, Veiculo> {
 	 * @param dtoBusca
 	 *            - objeto com filtros e parâmetros de paginação
 	 * 
-	 * @return {@link Response} - retorna o status Http para a requisição e os
-	 *         veículos encontrados (caso existam)
+	 * @return {@link Response} - retorna o status Http para a requisição e o objeto que contém os
+	 *         veículos encontrados (caso existam) e a contagem dos itens
 	 */
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)

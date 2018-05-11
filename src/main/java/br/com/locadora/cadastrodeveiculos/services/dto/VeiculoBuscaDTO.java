@@ -1,10 +1,13 @@
 package br.com.locadora.cadastrodeveiculos.services.dto;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 /**
  * Classe que representa DTO para busca de Veículos.
  * 
  * @author Thaise Santos Souza
  */
+@JsonIgnoreProperties
 public class VeiculoBuscaDTO implements DTO{
 
 	private String modelo;

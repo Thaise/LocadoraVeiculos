@@ -77,8 +77,8 @@ public class VeiculoModel extends AbstractModel<Veiculo> {
 	 *            - objeto que contém os filtros opcionais e opções de paginação
 	 *            (página e máximo de itens por página)
 	 *
-	 * @return retorna todos os veículos não excluídos logicamente e que contenham
-	 *         os filtros, caso sejam preenchidos
+	 * @return retorna objeto com todos os veículos não excluídos logicamente e que contenham
+	 *         os filtros, caso sejam preenchidos e a contagem dos itens
 	 * 
 	 * @throws ArmazenamentoException
 	 * @throws PaginacaoException

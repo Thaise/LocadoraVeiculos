@@ -1,8 +1,11 @@
 package br.com.locadora.cadastrodeveiculos.services.dto;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 /**
  * Classe que representa um DTO para erros em requisições
  */
+@JsonIgnoreProperties
 public class ErroDTO {
 
 	private Integer status;

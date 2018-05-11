@@ -1,6 +1,8 @@
 package br.com.locadora.cadastrodeveiculos.services.dto;
 
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import br.com.locadora.cadastrodeveiculos.dao.entidades.Veiculo;
 
 /**
@@ -10,7 +12,7 @@ import br.com.locadora.cadastrodeveiculos.dao.entidades.Veiculo;
  * 
  * @author Thaise Santos Souza
  */
-//@JsonIgnoreProperties
+@JsonIgnoreProperties
 public class VeiculoDTO extends Veiculo implements DTO {
 
 }
