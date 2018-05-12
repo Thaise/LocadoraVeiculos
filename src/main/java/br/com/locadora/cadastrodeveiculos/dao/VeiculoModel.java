@@ -91,11 +91,11 @@ public class VeiculoModel extends AbstractModel<Veiculo> {
 		Predicate<Veiculo> predicate = v -> !v.getFlExcluido();
 
 		if (!estaVazio(item.getModelo())) {
-			predicate = predicate.and(v -> v.getModelo().contains(item.getModelo()));
+			predicate = predicate.and(v -> v.getModelo().toUpperCase().contains(item.getModelo().toUpperCase()));
 		}
 
 		if (!estaVazio(item.getMarca())) {
-			predicate = predicate.and(v -> v.getMarca().equals(item.getMarca()));
+			predicate = predicate.and(v -> v.getMarca().equalsIgnoreCase(item.getMarca()));
 		}
 
 		if (!estaVazio(item.getPlaca())) {
