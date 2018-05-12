@@ -1,8 +1,12 @@
 package br.com.locadora.cadastrodeveiculos.services;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -15,6 +19,8 @@ import org.jboss.resteasy.specimpl.ResponseBuilderImpl;
 import br.com.locadora.cadastrodeveiculos.dao.AbstractModel;
 import br.com.locadora.cadastrodeveiculos.dao.VeiculoModel;
 import br.com.locadora.cadastrodeveiculos.dao.entidades.Veiculo;
+import br.com.locadora.cadastrodeveiculos.dao.entidades.enums.Categoria;
+import br.com.locadora.cadastrodeveiculos.dao.entidades.enums.Status;
 import br.com.locadora.cadastrodeveiculos.exception.ArmazenamentoException;
 import br.com.locadora.cadastrodeveiculos.exception.ValidacaoException;
 import br.com.locadora.cadastrodeveiculos.services.dto.RetornoBuscaDTO;
@@ -42,7 +48,7 @@ public class VeiculoService extends AbstractService<VeiculoDTO, Veiculo> {
 	 * veículo do banco em memória
 	 * 
 	 * @param item
-	 *            - veículo a ser removido
+	 *            veículo a ser removido
 	 * 
 	 * @return {@link Response} - retorna o status Http para a requisição
 	 */
@@ -65,7 +71,7 @@ public class VeiculoService extends AbstractService<VeiculoDTO, Veiculo> {
 	 * chassi de um veículo
 	 * 
 	 * @param item
-	 *            - veículo a ser validado
+	 *            veículo a ser validado
 	 * 
 	 * @return {@link Response} - retorna o status Http para a requisição
 	 */
@@ -88,7 +94,7 @@ public class VeiculoService extends AbstractService<VeiculoDTO, Veiculo> {
 	 * placa de um veículo
 	 * 
 	 * @param item
-	 *            - veículo a ser validado
+	 *            veículo a ser validado
 	 * 
 	 * @return {@link Response} - retorna o status Http para a requisição
 	 */
@@ -111,10 +117,11 @@ public class VeiculoService extends AbstractService<VeiculoDTO, Veiculo> {
 	 * na memória utilizando filtros opcionais e paginação
 	 * 
 	 * @param dtoBusca
-	 *            - objeto com filtros e parâmetros de paginação
+	 *            objeto com filtros e parâmetros de paginação
 	 * 
-	 * @return {@link Response} - retorna o status Http para a requisição e o objeto que contém os
-	 *         veículos encontrados (caso existam) e a contagem dos itens
+	 * @return {@link Response} - retorna o status Http para a requisição e o objeto
+	 *         que contém os veículos encontrados (caso existam) e a contagem dos
+	 *         itens
 	 */
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -136,7 +143,7 @@ public class VeiculoService extends AbstractService<VeiculoDTO, Veiculo> {
 	 * entre outras regras que devem ser executadas antes do veículo ser cadastrado
 	 * 
 	 * @param itemEntidade
-	 *            - veículo a ser verificado
+	 *            veículo a ser verificado
 	 * 
 	 * @throws Exception
 	 */
@@ -151,7 +158,7 @@ public class VeiculoService extends AbstractService<VeiculoDTO, Veiculo> {
 	 * entre outras regras que devem ser executadas antes do veículo ser atualizado
 	 * 
 	 * @param itemEntidade
-	 *            - veículo a ser verificado
+	 *            veículo a ser verificado
 	 * 
 	 * @throws Exception
 	 */
@@ -165,7 +172,7 @@ public class VeiculoService extends AbstractService<VeiculoDTO, Veiculo> {
 	 * Método que possui regras para validação da placa de um veículo
 	 * 
 	 * @param itemEntidade
-	 *            - veículo a ser validado
+	 *            veículo a ser validado
 	 * 
 	 * @throws ValidacaoException,
 	 *             ArmazenamentoException
@@ -192,7 +199,7 @@ public class VeiculoService extends AbstractService<VeiculoDTO, Veiculo> {
 	 * Método que possui regras para validação do chassi de um veículo
 	 * 
 	 * @param itemEntidade
-	 *            - veículo a ser validado
+	 *            veículo a ser validado
 	 * 
 	 * @throws ValidacaoException,
 	 *             ArmazenamentoException

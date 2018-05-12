@@ -13,9 +13,9 @@ public class ErroDTO {
 
 	/**
 	 * @param status
-	 *            - Código status HTTP do erro
+	 *            Código status HTTP do erro
 	 * @param msg
-	 *            - mensagem de erro
+	 *            mensagem de erro
 	 */
 	public ErroDTO(Integer status, String msg) {
 		super();

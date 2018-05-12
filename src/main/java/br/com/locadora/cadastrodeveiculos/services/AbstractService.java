@@ -41,7 +41,7 @@ public abstract class AbstractService<T extends DTO, E extends Entidade> {
 	 * no banco em memória
 	 * 
 	 * @param item
-	 *            - item que deve ser cadastrado
+	 *            item que deve ser cadastrado
 	 * 
 	 * @return {@link Response} - retorna o status Http para a requisição
 	 */
@@ -68,7 +68,7 @@ public abstract class AbstractService<T extends DTO, E extends Entidade> {
 	 * item no banco em memória
 	 * 
 	 * @param item
-	 *            - item que deve ser atualizado
+	 *            item que deve ser atualizado
 	 * 
 	 * @return {@link Response} - retorna o status Http para a requisição
 	 */
@@ -96,7 +96,7 @@ public abstract class AbstractService<T extends DTO, E extends Entidade> {
 	 * no banco em memória
 	 * 
 	 * @param id
-	 *            - identificador do item que deve ser buscado
+	 *            identificador do item que deve ser buscado
 	 * 
 	 * @return {@link Response} - retorna o status Http para a requisição e o
 	 *         veículo encontrado (caso exista)
@@ -127,7 +127,7 @@ public abstract class AbstractService<T extends DTO, E extends Entidade> {
 	 * @return {@link Response} - retorna o status Http para a requisição e os
 	 *         veículos encontrados (caso existam)
 	 */
-	@GET 
+	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/buscaTodos")
 	public Response buscaTodos() {
@@ -151,7 +151,7 @@ public abstract class AbstractService<T extends DTO, E extends Entidade> {
 	 * Monta WebApplicationException a partir de uma determinada exceção.
 	 * 
 	 * @param excecao
-	 *            - exceção base para retorno de WebApplicationException
+	 *            exceção base para retorno de WebApplicationException
 	 * 
 	 * @return retorna {@link WebApplicationException}
 	 */
@@ -170,7 +170,7 @@ public abstract class AbstractService<T extends DTO, E extends Entidade> {
 	 * Converte {@link Entidade} para {@link DTO}
 	 * 
 	 * @param entidade
-	 *            - entidade a ser convetida
+	 *            entidade a ser convetida
 	 * 
 	 * @return {@link DTO} a partir da entidade informada por parâmetro
 	 */
@@ -183,7 +183,7 @@ public abstract class AbstractService<T extends DTO, E extends Entidade> {
 	 * Converte {@link DTO} para {@link Entidade}
 	 * 
 	 * @param postDto
-	 *            - {@link DTO} a ser convetido
+	 *            {@link DTO} a ser convetido
 	 * 
 	 * @return {@link Entidade} a partir do dto informado por parâmetro
 	 */

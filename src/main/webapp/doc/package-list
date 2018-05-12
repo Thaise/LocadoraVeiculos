@@ -1,0 +1,7 @@
+br.com.locadora.cadastrodeveiculos.armazenamento
+br.com.locadora.cadastrodeveiculos.dao
+br.com.locadora.cadastrodeveiculos.dao.entidades
+br.com.locadora.cadastrodeveiculos.dao.entidades.enums
+br.com.locadora.cadastrodeveiculos.exception
+br.com.locadora.cadastrodeveiculos.services
+br.com.locadora.cadastrodeveiculos.services.dto

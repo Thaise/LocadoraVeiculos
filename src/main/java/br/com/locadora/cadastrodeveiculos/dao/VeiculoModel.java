@@ -27,7 +27,7 @@ public class VeiculoModel extends AbstractModel<Veiculo> {
 	 * em memória.
 	 * 
 	 * @param veiculo
-	 *            - veículo a ser excluído
+	 *            veículo a ser excluído
 	 * 
 	 * @throws ArmazenamentoException
 	 */
@@ -45,7 +45,7 @@ public class VeiculoModel extends AbstractModel<Veiculo> {
 	 * memória.
 	 * 
 	 * @param id
-	 *            - identificador do veículo
+	 *            identificador do veículo
 	 * 
 	 * @return Veiculo - veículo que possui o identificador informado por parâmetro
 	 * 
@@ -74,11 +74,11 @@ public class VeiculoModel extends AbstractModel<Veiculo> {
 	 * placa. Os filtros são opcionais. O retorno é sempre paginado.
 	 *
 	 * @param item
-	 *            - objeto que contém os filtros opcionais e opções de paginação
+	 *            objeto que contém os filtros opcionais e opções de paginação
 	 *            (página e máximo de itens por página)
 	 *
-	 * @return retorna objeto com todos os veículos não excluídos logicamente e que contenham
-	 *         os filtros, caso sejam preenchidos e a contagem dos itens
+	 * @return retorna objeto com todos os veículos não excluídos logicamente e que
+	 *         contenham os filtros, caso sejam preenchidos e a contagem dos itens
 	 * 
 	 * @throws ArmazenamentoException
 	 * @throws PaginacaoException
@@ -142,11 +142,11 @@ public class VeiculoModel extends AbstractModel<Veiculo> {
 	 * Método que realiza a paginação de uma lista
 	 * 
 	 * @param max
-	 *            - máximo de itens que devem retornar por página
+	 *            máximo de itens que devem retornar por página
 	 * @param pag
-	 *            - página atual
+	 *            página atual
 	 * @param lista
-	 *            - lista a ser paginada
+	 *            lista a ser paginada
 	 *
 	 * @return retorna a lista paginada
 	 * 

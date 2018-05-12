@@ -24,7 +24,7 @@ public abstract class AbstractModel<E extends Entidade> {
 	 * memória.
 	 * 
 	 * @param item
-	 *            - item a ser inserido
+	 *            item a ser inserido
 	 * 
 	 * @throws ArmazenamentoException
 	 */
@@ -41,7 +41,7 @@ public abstract class AbstractModel<E extends Entidade> {
 	 * em memória.
 	 * 
 	 * @param item
-	 *            - item a ser inserido
+	 *            item a ser inserido
 	 * 
 	 * @throws ArmazenamentoException
 	 */
@@ -58,7 +58,7 @@ public abstract class AbstractModel<E extends Entidade> {
 	 * memória.
 	 * 
 	 * @param item
-	 *            - item a ser inserido
+	 *            item a ser inserido
 	 */
 	public E getPeloId(Integer id) throws ArmazenamentoException {
 		E item = null;

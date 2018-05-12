@@ -25,7 +25,7 @@ public class BancoEmMemoria<E extends Entidade> {
 	 * Método que insere um item no banco em memória.
 	 * 
 	 * @param item
-	 *            - item a ser inserido
+	 *             item a ser inserido
 	 * 
 	 * @throws ArmazenamentoException
 	 */
@@ -44,7 +44,7 @@ public class BancoEmMemoria<E extends Entidade> {
 	 * Método que atualiza um item no banco em memória.
 	 * 
 	 * @param item
-	 *            - item a ser atualizado
+	 *            item a ser atualizado
 	 */
 	public void atualiza(E item) throws ArmazenamentoException {
 		try {
@@ -59,9 +59,9 @@ public class BancoEmMemoria<E extends Entidade> {
 	 * Método que busca um item no banco em memória.
 	 * 
 	 * @param id
-	 *            - identificador do item
+	 *            identificador do item
 	 * 
-	 * @return E - item que possui o identificador informado por parâmetro
+	 * @return E item que possui o identificador informado por parâmetro
 	 * 
 	 * @throws ArmazenamentoException
 	 */

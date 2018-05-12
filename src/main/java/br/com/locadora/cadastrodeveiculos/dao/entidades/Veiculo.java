@@ -126,6 +126,8 @@ public class Veiculo implements Entidade {
 	}
 
 	public void setFlExcluido(Boolean flExcluido) {
+		if(flExcluido == null)
+			flExcluido = false;
 		this.flExcluido = flExcluido;
 	}
 
