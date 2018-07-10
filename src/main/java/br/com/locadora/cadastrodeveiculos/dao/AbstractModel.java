@@ -3,10 +3,12 @@ package br.com.locadora.cadastrodeveiculos.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.locadora.cadastrodeveiculos.armazenamento.BancoEmMemoria;
 import br.com.locadora.cadastrodeveiculos.dao.entidades.Entidade;
 import br.com.locadora.cadastrodeveiculos.exception.ArmazenamentoException;
 
@@ -20,8 +22,8 @@ public abstract class AbstractModel<E extends Entidade> {
 	protected Logger logger = LoggerFactory.getLogger(AbstractModel.class);
 
 	/**
-	 * Método que possui as regras de negócio para a inserção de um item no banco em
-	 * memória.
+	 * Método que possui as regras de negócio para a inserção de um item no banco de
+	 * dados
 	 * 
 	 * @param item
 	 *            item a ser inserido
@@ -30,15 +32,18 @@ public abstract class AbstractModel<E extends Entidade> {
 	 */
 	public void insere(E item) throws ArmazenamentoException {
 		try {
-			getBanco().insere(item);
-		} catch (ArmazenamentoException e) {
-			throw e;
+			getEm().getTransaction().begin();
+			getEm().persist(item);
+			getEm().getTransaction().commit();
+		} catch (Exception e) {
+			getEm().getTransaction().rollback();
+			throw new ArmazenamentoException("Erro ao inserir item", e);
 		}
 	}
 
 	/**
 	 * Método que possui as regras de negócio para a atualização de um item no banco
-	 * em memória.
+	 * de dados
 	 * 
 	 * @param item
 	 *            item a ser inserido
@@ -47,15 +52,17 @@ public abstract class AbstractModel<E extends Entidade> {
 	 */
 	public void atualiza(E item) throws ArmazenamentoException {
 		try {
-			getBanco().atualiza(item);
-		} catch (ArmazenamentoException e) {
-			throw e;
+			getEm().getTransaction().begin();
+			getEm().merge(item);
+			getEm().getTransaction().commit();
+		} catch (Exception e) {
+			getEm().getTransaction().rollback();
+			throw new ArmazenamentoException("Erro ao atualizar item", e);
 		}
 	}
 
 	/**
-	 * Método que possui as regras de negócio para buscar um item no banco em
-	 * memória.
+	 * Método que possui as regras de negócio para buscar um item no banco de dados
 	 * 
 	 * @param item
 	 *            item a ser inserido
@@ -63,9 +70,11 @@ public abstract class AbstractModel<E extends Entidade> {
 	public E getPeloId(Integer id) throws ArmazenamentoException {
 		E item = null;
 		try {
-			item = getBanco().buscaPeloId(id);
-		} catch (ArmazenamentoException e) {
-			throw e;
+			item = getEm().find(getEntidade(), id);
+		} catch (NoResultException e) {
+			return null;
+		} catch (Exception e) {
+			throw new ArmazenamentoException("Erro ao buscar pelo ID", e);
 		}
 		return item;
 	}
@@ -81,13 +90,15 @@ public abstract class AbstractModel<E extends Entidade> {
 	public List<E> getTodos() throws ArmazenamentoException {
 		List<E> itens = new ArrayList<E>();
 		try {
-			itens = getBanco().buscaTodos();
-		} catch (ArmazenamentoException e) {
-			throw e;
+			itens = getEm().createQuery("SELECT o FROM " + getEntidade().getName() + " o").getResultList();
+		} catch (Exception e) {
+			throw new ArmazenamentoException("Erro ao buscar todos", e);
 		}
 		return itens;
 	}
 
-	public abstract BancoEmMemoria<E> getBanco() ;
+	public abstract Class<E> getEntidade();
+
+	protected abstract EntityManager getEm();
 
 }

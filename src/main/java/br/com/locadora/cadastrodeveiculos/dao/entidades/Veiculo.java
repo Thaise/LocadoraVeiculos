@@ -1,5 +1,13 @@
 package br.com.locadora.cadastrodeveiculos.dao.entidades;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 import br.com.locadora.cadastrodeveiculos.dao.entidades.enums.Categoria;
 import br.com.locadora.cadastrodeveiculos.dao.entidades.enums.Status;
 
@@ -9,21 +17,30 @@ import br.com.locadora.cadastrodeveiculos.dao.entidades.enums.Status;
  * @author Thaise Santos Souza
  * 
  */
+@Entity(name="veiculo")
 public class Veiculo implements Entidade {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_veiculo")
 	private Integer idVeiculo;
 	private String placa;
+	@Enumerated(EnumType.STRING)
 	private Categoria categoria;
 	private String marca;
 	private String modelo;
 	private String chassi;
 	private Integer ano;
-	private Boolean possuiAirbag;
-	private Boolean possuiArCond;
-	private Boolean possuiVidrosElet;
+	@Column(name = "possui_airbag")
+	private Integer possuiAirbag;
+	@Column(name = "possui_ar_cond")
+	private Integer possuiArCond;
+	@Column(name = "possui_vidros_elet")
+	private Integer possuiVidrosElet;
 	private Integer potencia;
 	private Status status;
-	private Boolean flExcluido = false;
+	@Column(name = "fl_excluido")
+	private Integer flExcluido = 0;
 
 	public Integer getIdVeiculo() {
 		return idVeiculo;
@@ -81,30 +98,6 @@ public class Veiculo implements Entidade {
 		this.ano = ano;
 	}
 
-	public Boolean getPossuiAirbag() {
-		return possuiAirbag;
-	}
-
-	public void setPossuiAirbag(Boolean possuiAirbag) {
-		this.possuiAirbag = possuiAirbag;
-	}
-
-	public Boolean getPossuiArCond() {
-		return possuiArCond;
-	}
-
-	public void setPossuiArCond(Boolean possuiArCond) {
-		this.possuiArCond = possuiArCond;
-	}
-
-	public Boolean getPossuiVidrosElet() {
-		return possuiVidrosElet;
-	}
-
-	public void setPossuiVidrosElet(Boolean possuiVidrosElet) {
-		this.possuiVidrosElet = possuiVidrosElet;
-	}
-
 	public Integer getPotencia() {
 		return potencia;
 	}
@@ -121,13 +114,35 @@ public class Veiculo implements Entidade {
 		this.status = status;
 	}
 
-	public Boolean getFlExcluido() {
+	public Integer getPossuiAirbag() {
+		return possuiAirbag;
+	}
+
+	public void setPossuiAirbag(Integer possuiAirbag) {
+		this.possuiAirbag = possuiAirbag;
+	}
+
+	public Integer getPossuiArCond() {
+		return possuiArCond;
+	}
+
+	public void setPossuiArCond(Integer possuiArCond) {
+		this.possuiArCond = possuiArCond;
+	}
+
+	public Integer getPossuiVidrosElet() {
+		return possuiVidrosElet;
+	}
+
+	public void setPossuiVidrosElet(Integer possuiVidrosElet) {
+		this.possuiVidrosElet = possuiVidrosElet;
+	}
+
+	public Integer getFlExcluido() {
 		return flExcluido;
 	}
 
-	public void setFlExcluido(Boolean flExcluido) {
-		if(flExcluido == null)
-			flExcluido = false;
+	public void setFlExcluido(Integer flExcluido) {
 		this.flExcluido = flExcluido;
 	}
 

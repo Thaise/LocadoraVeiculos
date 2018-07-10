@@ -1,16 +1,21 @@
 package br.com.locadora.cadastrodeveiculos.dao;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import br.com.locadora.cadastrodeveiculos.armazenamento.BancoEmMemoria;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import br.com.locadora.cadastrodeveiculos.dao.entidades.Veiculo;
 import br.com.locadora.cadastrodeveiculos.exception.ArmazenamentoException;
-import br.com.locadora.cadastrodeveiculos.exception.PaginacaoException;
 import br.com.locadora.cadastrodeveiculos.services.dto.RetornoBuscaDTO;
-import br.com.locadora.cadastrodeveiculos.services.dto.VeiculoBuscaDTO;
+import br.com.locadora.cadastrodeveiculos.services.dto.VeiculoBuscaFiltros;
 
 /**
  * Classe que representa um modelo do padrão DAO para Veículos. Possui todas as
@@ -20,11 +25,11 @@ import br.com.locadora.cadastrodeveiculos.services.dto.VeiculoBuscaDTO;
  */
 public class VeiculoModel extends AbstractModel<Veiculo> {
 
-	private static BancoEmMemoria<Veiculo> banco = new BancoEmMemoria<Veiculo>();
+	private EntityManager em = Persistence.createEntityManagerFactory("cadastroVeiculosPU").createEntityManager();
 
 	/**
 	 * Método que possui as regras de negócio para a remoção de um veículo do banco
-	 * em memória.
+	 * de dados.
 	 * 
 	 * @param veiculo
 	 *            veículo a ser excluído
@@ -33,16 +38,17 @@ public class VeiculoModel extends AbstractModel<Veiculo> {
 	 */
 	public void remove(Veiculo veiculo) throws ArmazenamentoException {
 		try {
-			veiculo.setFlExcluido(true);
+			veiculo.setFlExcluido(1);
 			super.atualiza(veiculo);
 		} catch (ArmazenamentoException e) {
+			em.getTransaction().rollback();
 			throw e;
 		}
 	}
 
 	/**
-	 * Método que possui as regras de negócio para buscar um veículo no banco em
-	 * memória.
+	 * Método que possui as regras de negócio para buscar um veículo no banco de
+	 * dados.
 	 * 
 	 * @param id
 	 *            identificador do veículo
@@ -57,7 +63,7 @@ public class VeiculoModel extends AbstractModel<Veiculo> {
 		try {
 			Veiculo v = super.getPeloId(id);
 
-			if (v != null && v.getFlExcluido() == false) {
+			if (v != null && v.getFlExcluido() == 0) {
 				return v;
 			}
 
@@ -68,10 +74,32 @@ public class VeiculoModel extends AbstractModel<Veiculo> {
 		}
 	}
 
+	public Veiculo getPeloChassi(String chassi) throws ArmazenamentoException {
+		try {
+			return (Veiculo) em.createQuery("SELECT v FROM " + Veiculo.class.getName() + " v WHERE v.chassi = :chassi")
+					.setParameter("chassi", chassi).getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} catch (Exception e) {
+			throw new ArmazenamentoException("Erro ao buscar pelo Chassi", e);
+		}
+	}
+
+	public Veiculo getPelaPlaca(String placa) throws ArmazenamentoException {
+		try {
+			return (Veiculo) em.createQuery("SELECT v FROM " + Veiculo.class.getName() + " v WHERE v.placa = :placa")
+					.setParameter("placa", placa).getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} catch (Exception e) {
+			throw new ArmazenamentoException("Erro ao buscar pela Placa", e);
+		}
+	}
+
 	/**
-	 * Método que possui as regras de negócio para buscar veículos no banco em
-	 * memória, exceto os excluídos. Possui opção de filtro por modelo, marca e
-	 * placa. Os filtros são opcionais. O retorno é sempre paginado.
+	 * Método que possui as regras de negócio para buscar veículos no banco de
+	 * dados, exceto os excluídos. Possui opção de filtro por modelo, marca e placa.
+	 * Os filtros são opcionais. O retorno é sempre paginado.
 	 *
 	 * @param item
 	 *            objeto que contém os filtros opcionais e opções de paginação
@@ -84,39 +112,53 @@ public class VeiculoModel extends AbstractModel<Veiculo> {
 	 * @throws PaginacaoException
 	 * 
 	 */
-	public RetornoBuscaDTO busca(VeiculoBuscaDTO item) throws ArmazenamentoException, PaginacaoException {
+	public RetornoBuscaDTO busca(VeiculoBuscaFiltros item) throws ArmazenamentoException {
 
 		RetornoBuscaDTO retorno = new RetornoBuscaDTO();
 
-		Predicate<Veiculo> predicate = v -> !v.getFlExcluido();
+		CriteriaBuilder builder = em.getCriteriaBuilder();
+
+		CriteriaQuery<Veiculo> criteriaQuery = builder.createQuery(Veiculo.class);
+		CriteriaQuery<Long> criteriaQueryCount = builder.createQuery(Long.class);
+
+		Root<Veiculo> root = criteriaQuery.from(Veiculo.class);
+		Predicate predicate = builder.and(builder.equal(root.<String>get("flExcluido"), 0));
 
 		if (!estaVazio(item.getModelo())) {
-			predicate = predicate.and(v -> v.getModelo().toUpperCase().contains(item.getModelo().toUpperCase()));
+			predicate = builder.and(predicate, builder.like(root.<String>get("modelo"), "%" + item.getModelo() + "%"));
 		}
 
 		if (!estaVazio(item.getMarca())) {
-			predicate = predicate.and(v -> v.getMarca().equalsIgnoreCase(item.getMarca()));
+			predicate = builder.and(predicate, builder.like(root.<String>get("marca"), "%" + item.getMarca() + "%"));
 		}
 
 		if (!estaVazio(item.getPlaca())) {
-			predicate = predicate.and(v -> v.getPlaca().equals(item.getPlaca()));
+			predicate = builder.and(predicate, builder.equal(root.<String>get("placa"), item.getPlaca()));
 		}
 		try {
-			List<Veiculo> lista = super.getTodos().stream().filter(predicate).collect(Collectors.toList());
-			retorno.setQuantidade(lista.size());
-			retorno.getVeiculos().addAll(getSubLista(item.getMaxItensRetorno(), item.getPagina(), lista));
+			TypedQuery<Veiculo> typedQuery = em
+					.createQuery(
+							criteriaQuery.select(root).where(predicate).orderBy(builder.desc(root.get("idVeiculo"))))
+					.setMaxResults(item.getMaxItensRetorno())
+					.setFirstResult((item.getPagina() - 1) * item.getMaxItensRetorno());
+			List<Veiculo> results = typedQuery.getResultList();
 
-			return retorno;
-		} catch (ArmazenamentoException e) {
-			throw e;
-		} catch (PaginacaoException e) {
-			throw e;
+			Long count = (Long) em.createQuery(
+					criteriaQueryCount.select(builder.count(criteriaQueryCount.from(Veiculo.class))).where(predicate))
+					.getSingleResult();
+
+			retorno.setQuantidade(count.intValue());
+			retorno.getVeiculos().addAll(results);
+
+		} catch (Exception e) {
+			throw new ArmazenamentoException("Erro ao buscar por filtros", e);
 		}
+		return retorno;
 	};
 
 	/**
 	 * Método que possui as regras de negócio para buscar todos os veículos no banco
-	 * em memória, exceto os excluídos.
+	 * de dados, exceto os excluídos.
 	 *
 	 * @return retorna todos os veículos não excluídos logicamente
 	 * 
@@ -125,7 +167,7 @@ public class VeiculoModel extends AbstractModel<Veiculo> {
 	 */
 	@Override
 	public List<Veiculo> getTodos() throws ArmazenamentoException {
-		return super.getTodos().stream().filter(v -> !v.getFlExcluido()).collect(Collectors.toList());
+		return super.getTodos().stream().filter(v -> v.getFlExcluido().equals(0)).collect(Collectors.toList());
 	}
 
 	/**
@@ -138,53 +180,14 @@ public class VeiculoModel extends AbstractModel<Veiculo> {
 		return valor == null || valor.trim().isEmpty();
 	}
 
-	/**
-	 * Método que realiza a paginação de uma lista
-	 * 
-	 * @param max
-	 *            máximo de itens que devem retornar por página
-	 * @param pag
-	 *            página atual
-	 * @param lista
-	 *            lista a ser paginada
-	 *
-	 * @return retorna a lista paginada
-	 * 
-	 * @throws PaginacaoException
-	 * 
-	 */
-	public static List<Veiculo> getSubLista(Integer max, Integer pag, List<Veiculo> lista) throws PaginacaoException {
-		try {
-			List<Veiculo> sublista = new ArrayList<Veiculo>();
-
-			if (max >= lista.size()) {
-				if (pag == 1)
-					sublista = lista;
-			} else {
-				Double div = lista.size() / max.doubleValue();
-				if (pag < div) {
-					div = div.intValue() > div ? div.intValue() - 1 : div;
-
-					if (pag - 1 == 0)
-						sublista = lista.subList(pag - 1, pag * max);
-					else
-						sublista = lista.subList((pag - 1) * max, pag * max);
-				} else {
-					Integer idxInicial = (pag - 1) * max;
-					if (idxInicial <= lista.size())
-						sublista = lista.subList((pag - 1) * max, lista.size());
-				}
-			}
-
-			return sublista;
-		} catch (Exception e) {
-			throw new PaginacaoException("Erro ao paginar itens", e);
-		}
+	@Override
+	public Class<Veiculo> getEntidade() {
+		return Veiculo.class;
 	}
 
 	@Override
-	public BancoEmMemoria<Veiculo> getBanco() {
-		return banco;
+	protected EntityManager getEm() {
+		return em;
 	}
 
 }

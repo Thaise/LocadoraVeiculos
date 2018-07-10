@@ -3,8 +3,10 @@ package br.com.locadora.cadastrodeveiculos.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -46,8 +48,8 @@ public abstract class AbstractService<T extends DTO, E extends Entidade> {
 	 * @return {@link Response} - retorna o status Http para a requisição
 	 */
 	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/cadastra")
 	public Response cadastra(T item) {
 		try {
 			E itemEntidade = convertToEntity(item);
@@ -72,9 +74,9 @@ public abstract class AbstractService<T extends DTO, E extends Entidade> {
 	 * 
 	 * @return {@link Response} - retorna o status Http para a requisição
 	 */
-	@POST
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/atualiza")
 	public Response atualiza(T item) {
 		try {
 			E itemEntidade = convertToEntity(item);
@@ -103,7 +105,7 @@ public abstract class AbstractService<T extends DTO, E extends Entidade> {
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/buscaPeloId/{id}")
+	@Path("{id}")
 	public Response buscaPeloId(@PathParam("id") Integer id) {
 		T dto = null;
 		try {
@@ -129,7 +131,6 @@ public abstract class AbstractService<T extends DTO, E extends Entidade> {
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/buscaTodos")
 	public Response buscaTodos() {
 		List<T> lista = new ArrayList<T>();
 		try {
